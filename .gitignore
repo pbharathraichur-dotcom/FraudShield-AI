@@ -1,0 +1,46 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Python Virtual Environments (Windows / macOS / Linux)
+venv/
+env/
+ENV/
+.venv/
+
+# SQLite Database files (keep schema, ignore local active DB instances)
+*.sqlite
+*.sqlite3
+database/*.db
+
+# Model artifacts (optional to ignore heavy binaries or keep them local)
+
+ml_model/saved_models/*.pkl
+!ml_model/saved_models/.gitkeep
+
+# Environment and Secret files
+.env
+.env.local
+
+# Operating System specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# IDE and Editor configs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env 

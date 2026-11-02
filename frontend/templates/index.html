@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FraudShield AI - College CIA-2 AI-Powered Financial Fraud Detection System using Isolation Forest">
+    <title>FraudShield AI – Financial Fraud Detection System</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="dashboard-body">
+    <!-- App Layout Container -->
+    <div class="app-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-logo">
+                    <div class="shield-icon-container">
+                        <svg class="shield-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M9 12l2 2 4-4" stroke="#06b6d4" stroke-width="2.5"/>
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">FraudShield <span class="ai-pill">AI</span></span>
+                        <span class="brand-sub">CIA-2 FinTech System</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#overview-section" class="nav-link active" id="nav-overview">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Dashboard Overview</span>
+                </a>
+                <a href="#analyze-section" class="nav-link" id="nav-analyze">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <span>Analyze Transaction</span>
+                </a>
+                <a href="#history-section" class="nav-link" id="nav-history">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="12 8 12 12 14 14"></polyline>
+                        <path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5"></path>
+                    </svg>
+                    <span>Audit History</span>
+                </a>
+                <a href="#model-info-section" class="nav-link" id="nav-model">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="6" y1="3" x2="6" y2="15"></line>
+                        <circle cx="18" cy="6" r="3"></circle>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <path d="M18 9a9 9 0 0 1-9 9"></path>
+                    </svg>
+                    <span>Model Diagnostics</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="system-status-pill">
+                    <span class="status-indicator-dot online" id="sys-dot"></span>
+                    <div class="status-meta">
+                        <span class="status-title" id="sys-title">System Online</span>
+                        <span class="status-engine" id="sys-engine">Isolation Forest (100 iTrees)</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Top Header Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <h1 class="page-title">Financial Fraud Surveillance Center</h1>
+                    <p class="page-subtitle">Real-time Unsupervised Anomaly Detection for Banking & Payments</p>
+                </div>
+                <div class="topbar-right">
+                    <div class="db-chip">
+                        <span class="db-dot"></span>
+                        <span>SQLite DB: <strong>fraudshield.db</strong></span>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" id="btn-refresh-all" title="Refresh Live Data">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        </svg>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-body">
+                
+                <!-- SECTION 1: METRICS & KPI OVERVIEW -->
+                <section class="section-container" id="overview-section">
+                    <div class="kpi-grid">
+                        
+                        <!-- Card 1: Total Monitored -->
+                        <div class="kpi-card">
+                            <div class="kpi-icon-wrapper bg-blue-subtle">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#3b82f6" stroke-width="2">
+                                    <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                                </svg>
+                            </div>
+                            <div class="kpi-data">
+                                <span class="kpi-label">Monitored Transactions</span>
+                                <h2 class="kpi-value" id="kpi-total-tx">--</h2>
+                                <span class="kpi-trend text-muted">Stored in SQLite</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Anomalies Flagged -->
+                        <div class="kpi-card">
+                            <div class="kpi-icon-wrapper bg-danger-subtle">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ef4444" stroke-width="2">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                            </div>
+                            <div class="kpi-data">
+                                <span class="kpi-label">Anomalies Flagged</span>
+                                <h2 class="kpi-value text-danger" id="kpi-total-anomalies">--</h2>
+                                <span class="kpi-trend text-danger" id="kpi-anomaly-rate">--% anomaly rate</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Average Risk Score -->
+                        <div class="kpi-card">
+                            <div class="kpi-icon-wrapper bg-amber-subtle">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#f59e0b" stroke-width="2">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                </svg>
+                            </div>
+                            <div class="kpi-data">
+                                <span class="kpi-label">Average Risk Index</span>
+                                <h2 class="kpi-value text-amber" id="kpi-avg-risk">--</h2>
+                                <span class="kpi-trend text-muted">Scale 0 - 100</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: High-Risk Critical Alerts -->
+                        <div class="kpi-card">
+                            <div class="kpi-icon-wrapper bg-purple-subtle">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#8b5cf6" stroke-width="2">
+                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </div>
+                            <div class="kpi-data">
+                                <span class="kpi-label">High-Risk Cases</span>
+                                <h2 class="kpi-value text-purple" id="kpi-high-risk">--</h2>
+                                <span class="kpi-trend text-muted">Action Required</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- SECTION 2: TRANSACTION ANALYZER & LIVE AI VERDICT -->
+                <section class="section-container" id="analyze-section">
+                    <div class="analyzer-grid">
+                        
+                        <!-- Left Panel: Transaction Input Form -->
+                        <div class="card form-card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Evaluate Transaction</h3>
+                                    <p>Submit transaction telemetry to run real-time Isolation Forest anomaly detection</p>
+                                </div>
+                            </div>
+
+                            <!-- Quick Preset Demo Buttons -->
+                            <div class="presets-bar">
+                                <span class="presets-label">Quick Test Scenarios:</span>
+                                <div class="presets-buttons">
+                                    <button type="button" class="btn-preset" id="preset-normal" title="Simulate everyday grocery purchase">
+                                        ☕ Normal Purchase
+                                    </button>
+                                    <button type="button" class="btn-preset" id="preset-shopping" title="Moderate online shopping">
+                                        🛒 Moderate Shopping
+                                    </button>
+                                    <button type="button" class="btn-preset btn-preset-danger" id="preset-fraud" title="High amount overnight wire transfer">
+                                        🚨 Overnight Fraud
+                                    </button>
+                                    <button type="button" class="btn-preset btn-preset-danger" id="preset-velocity" title="High-frequency card testing burst">
+                                        ⚡ Velocity Attack
+                                    </button>
+                                </div>
+                            </div>
+
+                            <form id="transaction-form" class="transaction-form" novalidate>
+                                
+                                <div class="form-row">
+                                    <!-- Transaction Amount -->
+                                    <div class="form-group col-6">
+                                        <label for="tx-amount">Amount (USD) <span class="req">*</span></label>
+                                        <div class="input-with-prefix">
+                                            <span class="input-prefix">$</span>
+                                            <input type="number" id="tx-amount" name="amount" class="form-control" placeholder="e.g. 150.00" step="0.01" min="0.01" required value="45.50">
+                                        </div>
+                                        <span class="field-hint">Transaction value</span>
+                                    </div>
+
+                                    <!-- Transaction Type -->
+                                    <div class="form-group col-6">
+                                        <label for="tx-type">Transaction Type</label>
+                                        <select id="tx-type" name="transaction_type" class="form-control">
+                                            <option value="PAYMENT" selected>PAYMENT (Point of Sale)</option>
+                                            <option value="TRANSFER">TRANSFER (P2P Wire)</option>
+                                            <option value="CASH_OUT">CASH_OUT (ATM Withdrawal)</option>
+                                            <option value="DEBIT">DEBIT (Direct Debit)</option>
+                                            <option value="CASH_IN">CASH_IN (Deposit)</option>
+                                        </select>
+                                        <span class="field-hint">Banking payment rail</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <!-- Transaction Hour -->
+                                    <div class="form-group col-6">
+                                        <label for="tx-hour">Transaction Hour (00:00 - 23:00) <span class="req">*</span></label>
+                                        <div class="hour-input-row">
+                                            <input type="number" id="tx-hour" name="transaction_hour" class="form-control" min="0" max="23" value="14" required>
+                                            <button type="button" class="btn-time-shortcut" id="btn-time-now" title="Set to current local time">Current Hour</button>
+                                        </div>
+                                        <span class="field-hint" id="hour-hint">14:00 (Standard daytime business hours)</span>
+                                    </div>
+
+                                    <!-- Transaction Frequency -->
+                                    <div class="form-group col-6">
+                                        <label for="tx-frequency">24h Frequency (Velocity) <span class="req">*</span></label>
+                                        <input type="number" id="tx-frequency" name="transaction_frequency" class="form-control" min="1" max="100" value="2" required>
+                                        <span class="field-hint">Number of transactions by account today</span>
+                                    </div>
+                                </div>
+
+                                <!-- Location & Device Indicator -->
+                                <div class="form-group">
+                                    <label class="d-block">Location / Device Mismatch Indicator</label>
+                                    <div class="radio-toggle-group">
+                                        <label class="radio-card" id="label-loc-normal">
+                                            <input type="radio" name="is_unusual_location" value="0" checked id="loc-normal">
+                                            <div class="radio-content">
+                                                <span class="radio-title">Verified Location</span>
+                                                <span class="radio-desc">Domestic / Recognized user device</span>
+                                            </div>
+                                        </label>
+                                        <label class="radio-card radio-danger" id="label-loc-unusual">
+                                            <input type="radio" name="is_unusual_location" value="1" id="loc-unusual">
+                                            <div class="radio-content">
+                                                <span class="radio-title">Unusual Location / IP</span>
+                                                <span class="radio-desc">Foreign IP, proxy, or new device</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block" id="btn-submit-analyze">
+                                    <span class="spinner d-none" id="btn-spinner"></span>
+                                    <svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                    </svg>
+                                    <span id="btn-text">Run Isolation Forest Analysis</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Right Panel: Live AI Result Display -->
+                        <div class="card result-card" id="result-card-container">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>AI Model Verdict</h3>
+                                    <p>Real-time anomaly scoring & explainability breakdown</p>
+                                </div>
+                                <span class="status-badge-chip" id="result-status-chip">Awaiting Input</span>
+                            </div>
+
+                            <!-- Initial State Placeholder -->
+                            <div class="result-placeholder" id="result-placeholder">
+                                <div class="placeholder-icon">
+                                    <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#475569" stroke-width="1.5">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    </svg>
+                                </div>
+                                <h4>No Transaction Analyzed Yet</h4>
+                                <p>Fill in the form on the left or select a Quick Test Scenario to see the Isolation Forest algorithm evaluate live transactions.</p>
+                            </div>
+
+                            <!-- Live Result Presentation Area -->
+                            <div class="result-display d-none" id="result-display-area">
+                                
+                                <!-- Verdict Banner -->
+                                <div class="verdict-banner" id="verdict-banner">
+                                    <div class="verdict-header">
+                                        <span class="verdict-icon" id="verdict-icon"></span>
+                                        <div class="verdict-text-block">
+                                            <h4 class="verdict-title" id="verdict-title">--</h4>
+                                            <span class="verdict-tx-id" id="verdict-tx-id">TXN-000000</span>
+                                        </div>
+                                    </div>
+                                    <span class="risk-badge" id="verdict-risk-badge">LOW RISK</span>
+                                </div>
+
+                                <!-- Risk Score Visual Meter -->
+                                <div class="score-meter-box">
+                                    <div class="score-meter-header">
+                                        <span class="meter-title">Calibrated Risk Index</span>
+                                        <span class="meter-score"><strong id="display-risk-score">0.0</strong> / 100</span>
+                                    </div>
+                                    
+                                    <div class="progress-track">
+                                        <div class="progress-bar" id="score-progress-bar" style="width: 0%;"></div>
+                                    </div>
+                                    
+                                    <div class="meter-scale-labels">
+                                        <span>0 (Normal)</span>
+                                        <span>40 (Medium)</span>
+                                        <span>70 (High Anomaly)</span>
+                                        <span>100</span>
+                                    </div>
+                                </div>
+
+                                <!-- Mathematical Decision Metrics -->
+                                <div class="math-metrics-row">
+                                    <div class="metric-box">
+                                        <span class="metric-key">Raw Decision Score</span>
+                                        <span class="metric-val" id="metric-decision-score">--</span>
+                                        <span class="metric-sub">&lt; 0 = Outlier</span>
+                                    </div>
+                                    <div class="metric-box">
+                                        <span class="metric-key">Tree Isolation Verdict</span>
+                                        <span class="metric-val" id="metric-tree-verdict">--</span>
+                                        <span class="metric-sub">100 iTrees</span>
+                                    </div>
+                                    <div class="metric-box">
+                                        <span class="metric-key">Database Status</span>
+                                        <span class="metric-val text-success">Saved to SQLite</span>
+                                        <span class="metric-sub">Audit logged</span>
+                                    </div>
+                                </div>
+
+                                <!-- Explainability Reasons -->
+                                <div class="explanations-box">
+                                    <h5 class="explanations-title">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                        </svg>
+                                        AI Contributing Factors &amp; Explanations:
+                                    </h5>
+                                    <ul class="explanations-list" id="explanations-list">
+                                        <!-- Dynamically populated -->
+                                    </ul>
+                                </div>
+
+                                <!-- College Academic Disclaimer -->
+                                <div class="disclaimer-alert">
+                                    <strong>Academic Evaluation Note:</strong> <span id="display-disclaimer">Anomaly detection identifies statistical outliers and unusual behavioral patterns; it highlights transactions for manual review and does not constitute definitive proof of fraudulent intent.</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- SECTION 3: TRANSACTION AUDIT HISTORY & ALERTS -->
+                <section class="section-container" id="history-section">
+                    <div class="card table-card">
+                        
+                        <div class="table-header-bar">
+                            <div class="table-title-group">
+                                <h3>Transaction Audit Log</h3>
+                                <p>Live records persisted in SQLite database (<code class="code-tag">database/fraudshield.db</code>)</p>
+                            </div>
+                            
+                            <!-- Table Filter Tabs -->
+                            <div class="table-controls">
+                                <div class="filter-tabs">
+                                    <button class="filter-tab active" data-filter="all" id="tab-filter-all">All Records</button>
+                                    <button class="filter-tab" data-filter="anomalies" id="tab-filter-anomalies">🚨 Anomalies Only</button>
+                                    <button class="filter-tab" data-filter="normal" id="tab-filter-normal">✅ Normal Only</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Table Container -->
+                        <div class="table-responsive">
+                            <table class="data-table" id="transactions-table">
+                                <thead>
+                                    <tr>
+                                        <th>Txn ID</th>
+                                        <th>Timestamp</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Hour</th>
+                                        <th>Velocity</th>
+                                        <th>Location</th>
+                                        <th>Risk Score</th>
+                                        <th>Verdict</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    <tr>
+                                        <td colspan="9" class="text-center py-4 text-muted">Loading transactions from database...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- SECTION 4: MODEL DIAGNOSTICS & ARCHITECTURE -->
+                <section class="section-container" id="model-info-section">
+                    <div class="card info-card">
+                        <div class="card-header">
+                            <h3>Isolation Forest Model Architecture &amp; Methodology</h3>
+                        </div>
+                        <div class="diag-grid">
+                            <div class="diag-item">
+                                <span class="diag-key">Core Algorithm</span>
+                                <span class="diag-val">Isolation Forest (<code class="code-tag">sklearn.ensemble.IsolationForest</code>)</span>
+                                <p class="diag-desc">Constructs 100 orthogonal isolation trees that partition the feature space with random cuts.</p>
+                            </div>
+                            <div class="diag-item">
+                                <span class="diag-key">Trained Features</span>
+                                <span class="diag-val">Amount, Hour, Frequency (24h), Location Indicator</span>
+                                <p class="diag-desc">Features are normalized with StandardScaler and stored in <code class="code-tag">preprocessor.joblib</code>.</p>
+                            </div>
+                            <div class="diag-item">
+                                <span class="diag-key">Why Unsupervised?</span>
+                                <span class="diag-val">No Prior Fraud Labels Needed</span>
+                                <p class="diag-desc">Anomalies are detected purely by their low average path length across the decision tree ensemble.</p>
+                            </div>
+                            <div class="diag-item">
+                                <span class="diag-key">Backend &amp; Persistence</span>
+                                <span class="diag-val">Python Flask REST API + SQLite</span>
+                                <p class="diag-desc">Inference takes &lt; 5ms; each transaction is automatically logged for regulatory audit trails.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Footer -->
+            <footer class="dashboard-footer">
+                <div class="footer-content">
+                    <p>FraudShield AI &bull; College CIA-2 Project &bull; Powered by Flask, SQLite &amp; Scikit-learn</p>
+                    <span class="footer-tag">Model: <code class="code-tag">isolation_forest.joblib</code></span>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Client-side JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

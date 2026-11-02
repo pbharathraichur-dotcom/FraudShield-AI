@@ -1,0 +1,15 @@
+# FraudShield AI - Python Dependencies
+# Lightweight, essential dependencies for machine learning and web service
+
+# Web Framework
+Flask>=3.0.0
+
+# Machine Learning & Data Processing
+scikit-learn>=1.4.0
+pandas>=2.2.0
+numpy>=1.26.0
+
+# Model Persistence (Saving & Loading trained models)
+joblib>=1.3.0
+
+# Note: SQLite3 is part of Python's standard library; no extra pip package required.
