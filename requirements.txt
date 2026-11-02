@@ -13,3 +13,4 @@ numpy>=1.26.0
 joblib>=1.3.0
 
 # Note: SQLite3 is part of Python's standard library; no extra pip package required.
+gunicorn>=23.0.0 
